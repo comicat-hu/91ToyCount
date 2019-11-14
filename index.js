@@ -2,6 +2,7 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 var cheerioTableparser = require('cheerio-tableparser');
 var log4js = require('log4js');
+var cache = require('node-file-cache').create();
 var bots = require('./bots');
 
 require('dotenv').config();
@@ -85,6 +86,15 @@ var run = async function (target, cliParams = {}) {
             remain += Number.parseInt(data[2][i]);
         }
     }
+
+    // 查找歷史數量是否變更
+    remainHistory = cache.get(targetUrl);
+    if (remainHistory && remainHistory == remain) {
+        logger.info('remain not change.');
+        return;
+    }
+
+    cache.set(targetUrl, remain, { life: 86400 });
 
     // 組合通知內容
     var sendText = `*${title}*\n`;
