@@ -24,6 +24,8 @@ log4js.configure({
 });
 var logger = log4js.getLogger('appLog');
 
+var debug = false;
+
 var getSenders = function () {
     var senders = [];
     if (getEnv('SLACK_NT') === true) {
@@ -58,7 +60,6 @@ var parseCliParams = function () {
 };
 
 var run = async function (target, cliParams = {}) {
-    var debug = cliParams.debug;
 
     // 爬取資料
     var targetUrl = target;
@@ -90,7 +91,7 @@ var run = async function (target, cliParams = {}) {
     // 查找歷史數量是否變更
     remainHistory = cache.get(targetUrl);
     if (remainHistory && remainHistory == remain) {
-        logger.info('remain not change.');
+        logger.info(`${targetUrl} remain not change.`);
         return;
     }
 
@@ -107,7 +108,7 @@ var run = async function (target, cliParams = {}) {
     sendText += '```\n';
 
     if (debug) {
-        console.log(sendText);
+        logger.debug(sendText);
         return;
     }
 
@@ -130,6 +131,12 @@ var run = async function (target, cliParams = {}) {
 var main = async function () {
     try {
         var cliParams = parseCliParams();
+        if (cliParams.debug) {
+            debug = true;
+            logger.level = 'debug';
+            logger.debug('Debug mode enable.');
+        }
+
         var targets = require('./targets.json');
         for (var target of targets) {
             await run(target, cliParams);
