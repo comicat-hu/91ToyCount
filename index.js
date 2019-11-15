@@ -64,6 +64,9 @@ var run = async function (target, cliParams = {}) {
     // 爬取資料
     var targetUrl = target;
     var response = await axios.get(targetUrl);
+    // 使用可能redirect後的Url
+    targetUrl = response.request.res.responseUrl;
+
     var $ = cheerio.load(response.data);
     var title = $('title').text();
     var table = $('#right_content > div:nth-child(3) > div:nth-child(2) > table');
