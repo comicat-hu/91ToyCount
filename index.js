@@ -94,7 +94,7 @@ var run = async function (target, cliParams = {}) {
     // 查找歷史數量是否變更
     remainHistory = cache.get(targetUrl);
     if (remainHistory && remainHistory == remain) {
-        logger.info(`${targetUrl} remain not change.`);
+        logger.debug(`${targetUrl} remain not change.`);
         return;
     }
 
