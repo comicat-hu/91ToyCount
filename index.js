@@ -69,6 +69,7 @@ var run = async function (target, cliParams = {}) {
 
     var $ = cheerio.load(response.data);
     var title = $('#name').text();
+    var price = $('#price').text();
     var table = $('#right_content > div:nth-child(3) > div:nth-child(2) > table');
 
     cheerioTableparser($); // .parsetable(dupCols, dupRows, textMode)
@@ -102,7 +103,7 @@ var run = async function (target, cliParams = {}) {
 
     // 組合通知內容
     var sendText = `*${title}*\n`;
-    sendText += `${targetUrl}\n`;
+    sendText += `${targetUrl} ($${price}/抽)\n`;
     sendText += '```';
     for (let name in result) {
         sendText += (name + ': ' + JSON.stringify(result[name]) + '\n');
