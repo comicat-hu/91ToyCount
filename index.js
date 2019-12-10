@@ -68,7 +68,7 @@ var run = async function (target, cliParams = {}) {
     targetUrl = response.request.res.responseUrl;
 
     var $ = cheerio.load(response.data);
-    var title = $('title').text();
+    var title = $('#name').text();
     var table = $('#right_content > div:nth-child(3) > div:nth-child(2) > table');
 
     cheerioTableparser($); // .parsetable(dupCols, dupRows, textMode)
