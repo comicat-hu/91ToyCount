@@ -75,8 +75,9 @@ var run = async function (target, cliParams = {}) {
     cheerioTableparser($); // .parsetable(dupCols, dupRows, textMode)
     var data = table.parsetable(false, false, true);
 
-    if (!data) {
-        throw new Error('Result empty.');
+    if (!data || !data[0]) {
+        logger.warn(`${targetUrl} fetch failed.`);
+        return;
     }
 
     // 整理資料
